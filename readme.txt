@@ -16,6 +16,13 @@ What this plugin basically does is to postpone loading the content of those widg
 
 You can choose which widgets should be loaded like that, by default the plugin does not “impose” itself on any widget. You may also choose to display a throbber while the content of a widget is loaded.
 
+__Feedback__ is welcome!
+If you need help, have problems, want to leave feedback or want to provide constructive criticism, please do so here at the [Lazy Widget Loader plugin page](http://www.itthinx.com/plugins/lazy-widget-loader).
+
+Please try to solve problems there before you rate this plugin or say it doesn't work. There goes a _lot_ of work into providing you with free quality plugins! Please appreciate that and help with your feedback. Thanks!
+
+[Follow me on Twitter](http://twitter.com/itthinx) for updates on this and other plugins.
+
 = Advanced lazy loading integration =
 
 The Lazy Widget Loader can take advantage of the *advanced asynchronous loading* mechanism provided by the [Itthinx LazyLoader](http://www.itthinx.com/plugins/itthinx-lazyloader) for content and widgets.
