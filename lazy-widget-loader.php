@@ -21,7 +21,7 @@
  * Plugin Name: Lazy Widget Loader
  * Plugin URI: http://www.itthinx.com/plugins/lazy-widget-loader
  * Description: The Lazy Widget Loader provides a lazy loading mechanism that defers loading the content of selected widgets to the footer, allowing your main content to appear first. Use it on slow widgets, especially those that load content from external sources like Facebook, Twitter, AdSense, ... <strong>Go Pro!</strong> Enable advanced lazy loading mechanisms for <em>content and widgets</em> with <a href="http://www.itthinx.com/plugins/itthinx-lazyloader" target="_blank"><strong>Itthinx LazyLoader</strong></a>: <strong>Speed up page load time, on-demand asynchronous loading, lazy-loading shortcodes</strong>.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: itthinx (Karim Rahimpur)
  * Author URI: http://www.itthinx.com
  * Donate-Link: http://www.itthinx.com/plugins/itthinx-lazyloader
@@ -468,10 +468,27 @@ function LWL_widget_add_controls() {
 		} // !empty( $widget_id )
 	}
 	foreach ( $wp_registered_widgets as $id => $widget ) {
-		$wp_registered_widget_controls[$id]['params'][0]['lazy-widget-loader-widget-id'] = $id;
-		// replace the callback with our own
-		$wp_registered_widget_controls[$id]['LWL_original_callback'] = $wp_registered_widget_controls[$id]['callback'];
-		$wp_registered_widget_controls[$id]['callback'] = 'LWL_widget_alter_controls';
+				
+		$alter_callback = false;
+		if ( isset( $wp_registered_widget_controls[$id]['params'][0] ) && is_array( $wp_registered_widget_controls[$id]['params'][0] ) ) {
+			$wp_registered_widget_controls[$id]['params'][0]['lazy-widget-loader-widget-id'] = $id;
+			$alter_callback = true;
+		} else if ( empty( $wp_registered_widget_controls[$id]['params'] ) ) {
+			array_push( $wp_registered_widget_controls[$id]['params'], $id );
+			$alter_callback = true;
+		}
+		
+		if ( $alter_callback ) {
+			// replace the callback with our own
+			$wp_registered_widget_controls[$id]['LWL_original_callback'] = $wp_registered_widget_controls[$id]['callback'];
+			$wp_registered_widget_controls[$id]['callback'] = 'LWL_widget_alter_controls';
+		} else {
+			if ( isset( $settings[$widget_id] ) ) {
+				unset( $settings[$widget_id] );
+				_LWL_update_settings( $settings );
+			}
+		}
+
 	}
 }
 
