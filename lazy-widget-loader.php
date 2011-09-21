@@ -21,7 +21,7 @@
  * Plugin Name: Lazy Widget Loader
  * Plugin URI: http://www.itthinx.com/plugins/lazy-widget-loader
  * Description: The Lazy Widget Loader provides a lazy loading mechanism that defers loading the content of selected widgets to the footer, allowing your main content to appear first. Use it on slow widgets, especially those that load content from external sources like Facebook, Twitter, AdSense, ... <strong>Go Pro!</strong> Enable advanced lazy loading mechanisms for <em>content and widgets</em> with <a href="http://www.itthinx.com/plugins/itthinx-lazyloader" target="_blank"><strong>Itthinx LazyLoader</strong></a>: <strong>Speed up page load time, on-demand asynchronous loading, lazy-loading shortcodes</strong>.
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: itthinx (Karim Rahimpur)
  * Author URI: http://www.itthinx.com
  * Donate-Link: http://www.itthinx.com/plugins/itthinx-lazyloader
@@ -380,7 +380,7 @@ function LWL_widget_add_controls() {
 			} else {
 				$settings[$widget_id]['throbber'] = true;
 			}
-			$min_width = intval( $_POST[$widget_id . '-lazy-widget-loader-min-width'] );
+			$min_width = isset( $_POST[$widget_id . '-lazy-widget-loader-min-width'] ) ? intval( $_POST[$widget_id . '-lazy-widget-loader-min-width'] ) : 0;
 			if ( $min_width <= 0 ) {
 				if ( isset( $settings[$widget_id]['min-width'] ) ) {
 					unset( $settings[$widget_id]['min-width'] );
@@ -388,7 +388,7 @@ function LWL_widget_add_controls() {
 			} else {
 				$settings[$widget_id]['min-width'] = $min_width;
 			}
-			$min_height = intval( $_POST[$widget_id . '-lazy-widget-loader-min-height'] );
+			$min_height = isset( $_POST[$widget_id . '-lazy-widget-loader-min-height'] ) ? intval( $_POST[$widget_id . '-lazy-widget-loader-min-height'] ) : 0;
 			if ( $min_height <= 0 ) {
 				if ( isset( $settings[$widget_id]['min-height'] ) ) {
 					unset( $settings[$widget_id]['min-height'] );
@@ -396,7 +396,7 @@ function LWL_widget_add_controls() {
 			} else {
 				$settings[$widget_id]['min-height'] = $min_height;
 			}
-			$width = intval( $_POST[$widget_id . '-lazy-widget-loader-width'] );
+			$width = isset( $_POST[$widget_id . '-lazy-widget-loader-width'] ) ? intval( $_POST[$widget_id . '-lazy-widget-loader-width'] ) : 0;
 			if ( $width <= 0 ) {
 				if ( isset( $settings[$widget_id]['width'] ) ) {
 					unset( $settings[$widget_id]['width'] );
@@ -404,7 +404,7 @@ function LWL_widget_add_controls() {
 			} else {
 				$settings[$widget_id]['width'] = $width;
 			}
-			$height = intval( $_POST[$widget_id . '-lazy-widget-loader-height'] );
+			$height = isset( $_POST[$widget_id . '-lazy-widget-loader-height'] ) ? intval( $_POST[$widget_id . '-lazy-widget-loader-height'] ) : 0;
 			if ( $height <= 0 ) {
 				if ( isset( $settings[$widget_id]['height'] ) ) {
 					unset( $settings[$widget_id]['height'] );
@@ -474,17 +474,26 @@ function LWL_widget_add_controls() {
 			$wp_registered_widget_controls[$id]['params'][0]['lazy-widget-loader-widget-id'] = $id;
 			$alter_callback = true;
 		} else if ( empty( $wp_registered_widget_controls[$id]['params'] ) ) {
-			array_push( $wp_registered_widget_controls[$id]['params'], $id );
-			$alter_callback = true;
+			
+			if ( !isset( $wp_registered_widget_controls[$id]['params'] ) || ( $wp_registered_widget_controls[$id]['params'] === null ) ) {
+				// widgets that do not provide controls end up here with
+				// params null, initialize params as an array so we
+				// can add the id
+				$wp_registered_widget_controls[$id]['params'] = array();
+			}
+			if ( is_array( $wp_registered_widget_controls[$id]['params'] ) ) {
+				$wp_registered_widget_controls[$id]['params'][0]['lazy-widget-loader-widget-id'] = $id;
+				$alter_callback = true;
+			}
 		}
 		
 		if ( $alter_callback ) {
 			// replace the callback with our own
-			$wp_registered_widget_controls[$id]['LWL_original_callback'] = $wp_registered_widget_controls[$id]['callback'];
+			$wp_registered_widget_controls[$id]['LWL_original_callback'] = isset( $wp_registered_widget_controls[$id]['callback'] ) ? $wp_registered_widget_controls[$id]['callback'] : null;
 			$wp_registered_widget_controls[$id]['callback'] = 'LWL_widget_alter_controls';
 		} else {
-			if ( isset( $settings[$widget_id] ) ) {
-				unset( $settings[$widget_id] );
+			if ( isset( $settings[$id] ) ) {
+				unset( $settings[$id] );
 				_LWL_update_settings( $settings );
 			}
 		}
@@ -515,7 +524,7 @@ function LWL_widget_alter_controls() {
 	if ( is_array( $params[0] ) && isset( $params[0]['number'] ) ) {
 		$number = $params[0]['number'];
 	}
-	if ( $number == -1 ) {
+	if ( isset( $number ) && ( $number == -1 ) ) {
 		// @see wp-admin/includes/widgets.php quoting:
 		// number == -1 implies a template where id numbers are replaced by a generic '__i__'
 		$number = '__i__';
@@ -525,7 +534,7 @@ function LWL_widget_alter_controls() {
 		$widget_id = $wp_registered_widget_controls[$id]['id_base'] . '-' . $number;
 	}
 	// call the original callback before adding our stuff
-	$callback = $wp_registered_widget_controls[$id]['LWL_original_callback'];
+	$callback = ( isset( $wp_registered_widget_controls[$id]['LWL_original_callback'] ) ? $wp_registered_widget_controls[$id]['LWL_original_callback'] : '' );
 	if ( is_callable( $callback ) ) {
 		call_user_func_array( $callback, $params );
 	}

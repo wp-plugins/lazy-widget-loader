@@ -4,7 +4,7 @@ Donate link: http://www.itthinx.com/plugins/itthinx-lazyloader
 Tags: ad, addtoany, ads, adsense, async, asynchronous, asynchronous loading, del.icio.us, delicious, deviantart, facebook, facepile, flickr, lazy, lazy acquisition, lazy load, lazy loading, like box, likebox, linkedin, page load, page load time, page loading, page loading time, page rank, page speed, pagerank, pagespeed, twitter, seo, site, social, vimeo, widget, wordpress, xing, youtube
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 
 Lazy Widget Loader provides lazy loading for widgets to improve page loading. Use on slow widgets with content from Facebook, Twitter, AdSense ...
 
@@ -107,8 +107,11 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 
 == Changelog ==
 
+= 1.2.2 =
+* Improved compatibility for widgets, including those without controls.
+
 = 1.2.1 =
-* Adjusted to avoid compatibility issues with older plugins 
+* Adjusted to avoid compatibility issues with older plugins.
 
 = 1.2.0 =
 * Initial public release.
@@ -122,6 +125,9 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 * Initial internal release.
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+Further improved widget compatibility, please update. 
 
 = 1.2.1 =
 Please update to this release if you get "Warning: Cannot use a scalar value as an array ..."
