@@ -19,7 +19,9 @@ You can choose which widgets should be loaded like that, by default the plugin d
 __Feedback__ is welcome!
 If you need help, have problems, want to leave feedback or want to provide constructive criticism, please do so here at the [Lazy Widget Loader plugin page](http://www.itthinx.com/plugins/lazy-widget-loader).
 
-Please try to solve problems there before you rate this plugin or say it doesn't work. There goes a _lot_ of work into providing you with free quality plugins! Please appreciate that and help with your feedback. Thanks!
+Please try to solve problems there before you rate this plugin or say it doesn't work.
+
+A _lot_ of work goes into providing you with free quality plugins! Please appreciate that and help with your feedback. Thanks!
 
 [Follow me on Twitter](http://twitter.com/itthinx) for updates on this and other plugins.
 
