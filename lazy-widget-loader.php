@@ -127,7 +127,6 @@ function LWL_get_widgets() {
  */
 function _LWL_set_widget( $id, $widget_content ) {
 	global $LWL_widgets;
-		
 	if ( !isset( $LWL_widgets ) ) {
 		$LWL_widgets = array();
 	}
@@ -159,11 +158,9 @@ function LWL_admin_menu() {
  * Renders options screen and handles settings submission.
  */
 function LWL_options() {
-	
 	if ( !current_user_can( "manage_options" ) ) {
 		wp_die( __( 'Access denied.', LWL_PLUGIN_DOMAIN ) );
 	}
-	
 	echo
 		'<div>' .
 			'<h2>' .
@@ -183,12 +180,10 @@ function LWL_options() {
 			_LWL_update_settings( $settings );
 		}
 	}
-	
 	$delete_data = LWL_get_setting( 'delete_data', false );
-	
 	// render options form
 	echo
-		'<form action="" name="options" method="post">' .		
+		'<form action="" name="options" method="post">' .
 			'<div>' .
 				'<h3>' . __( 'Settings', LWL_PLUGIN_DOMAIN ) . '</h3>' .
 				'<p>' .
@@ -302,14 +297,14 @@ function LWL_widget_alter_callback() {
 	$params = func_get_args();
 	$id = array_pop( $params );
 	$original_callback = $wp_registered_widgets[$id]['LWL_original_callback'];
-	
+
 	ob_start();
 	call_user_func_array( $original_callback, $params );
 	$widget_content = ob_get_contents();
 	ob_end_clean();
-	
+
 	$settings = LWL_get_settings();
-	
+
 	if ( isset( $settings[$id]['use'] ) && $settings[$id]['use'] ) {
 		if ( !function_exists( "IX_LL_lazyload" ) || ( isset( $settings[$id]['use-itthinx-lazyloader'] ) && ( $settings[$id]['use-itthinx-lazyloader'] === false ) ) ) {
 			_LWL_set_widget( $id, $widget_content );
@@ -412,13 +407,13 @@ function LWL_widget_add_controls() {
 			} else {
 				$settings[$widget_id]['height'] = $height;
 			}
-			
+
 			if ( ! isset ( $_POST[$widget_id . '-expand-options'] ) || ( intval( $_POST[$widget_id . '-expand-options'] ) === 0 ) ) {
 				$settings[$widget_id]['expand-options'] = false;
 			} else {
 				$settings[$widget_id]['expand-options'] = true;
 			}
-			
+
 			// itthinx-lazyloader options
 			if ( ! isset ( $_POST[$widget_id . '-use-itthinx-lazyloader'] ) ) {
 				$settings[$widget_id]['use-itthinx-lazyloader'] = false;
@@ -468,13 +463,13 @@ function LWL_widget_add_controls() {
 		} // !empty( $widget_id )
 	}
 	foreach ( $wp_registered_widgets as $id => $widget ) {
-				
+
 		$alter_callback = false;
 		if ( isset( $wp_registered_widget_controls[$id]['params'][0] ) && is_array( $wp_registered_widget_controls[$id]['params'][0] ) ) {
 			$wp_registered_widget_controls[$id]['params'][0]['lazy-widget-loader-widget-id'] = $id;
 			$alter_callback = true;
 		} else if ( empty( $wp_registered_widget_controls[$id]['params'] ) ) {
-			
+
 			if ( !isset( $wp_registered_widget_controls[$id]['params'] ) || ( $wp_registered_widget_controls[$id]['params'] === null ) ) {
 				// widgets that do not provide controls end up here with
 				// params null, initialize params as an array so we
@@ -486,7 +481,7 @@ function LWL_widget_add_controls() {
 				$alter_callback = true;
 			}
 		}
-		
+
 		if ( $alter_callback ) {
 			// replace the callback with our own
 			$wp_registered_widget_controls[$id]['LWL_original_callback'] = isset( $wp_registered_widget_controls[$id]['callback'] ) ? $wp_registered_widget_controls[$id]['callback'] : null;
@@ -518,7 +513,7 @@ function LWL_widget_alter_controls() {
 	$params = func_get_args();
 
 	$settings = LWL_get_settings();
-	
+
 	$id = ( is_array ( $params[0] ) ) ? $params[0]['lazy-widget-loader-widget-id'] : array_pop( $params );
 	$widget_id = $id;
 	if ( is_array( $params[0] ) && isset( $params[0]['number'] ) ) {
@@ -529,7 +524,7 @@ function LWL_widget_alter_controls() {
 		// number == -1 implies a template where id numbers are replaced by a generic '__i__'
 		$number = '__i__';
 		$value = "";
-	}	
+	}
 	if ( isset( $number ) ) {
 		$widget_id = $wp_registered_widget_controls[$id]['id_base'] . '-' . $number;
 	}
@@ -538,7 +533,7 @@ function LWL_widget_alter_controls() {
 	if ( is_callable( $callback ) ) {
 		call_user_func_array( $callback, $params );
 	}
-	
+
 	if ( isset( $settings[$widget_id]['expand-options'] ) && ( $settings[$widget_id]['expand-options'] === true ) ) {
 		$toggler_class = "retract";
 		$options_class = "";
@@ -548,7 +543,7 @@ function LWL_widget_alter_controls() {
 		$options_class = "hidden";
 		$expand_options = "0";
 	}
-	
+
 	$options_prefix  = '<div class="options-view">';
 	$options_prefix .= '<noscript>';
 	$options_prefix .= '<style type="text/css">';
@@ -558,24 +553,24 @@ function LWL_widget_alter_controls() {
 	$options_prefix .= '<div id="toggler-' . $LWL_widget_count . '" class="options-view-toggle '.$toggler_class.'">' . __( 'Options', LWL_PLUGIN_DOMAIN ) . '</div>';
 	$options_prefix .= '<input class="options-view-expand" type="hidden" name="' . $widget_id . '-expand-options" value="' . $expand_options . '" />';
 	$options_prefix .= "<div class='options-view-content $options_class'>";
-		
+
 	$options_suffix  = "</div>"; // .options-view-content
 	$options_suffix .= "</div>"; // .options-view
-	
+
 	// now add our stuff
 	if ( function_exists( "IX_LL_lazyload" ) ) {
 		echo '<div class="lazy-widget-loader widget-controls lazy-widget-loader itthinx-lazyloader">';
 	} else {
 		echo '<div class="lazy-widget-loader widget-controls lazy-widget-loader">';
 	}
-	
+
 	// use loader?
 	$checked = ( ( isset( $settings[$widget_id]['use'] ) && $settings[$widget_id]['use'] ) ? 'checked="checked"' : '' );
 	echo '<div class="section top">';
 	echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $widget_id . '-lazy-widget-loader-use"/>';
 	echo '<label class="title" for="' . $widget_id . '-lazy-widget-loader-use">' . __( 'Lazy Loading', LWL_PLUGIN_DOMAIN ) . '</label>';
 	echo '</div>';
-	
+
 	// check for itthinx lazyloader & show primary options
 	if ( function_exists( "IX_LL_lazyload" ) ) {
 		// use by default
@@ -588,46 +583,46 @@ function LWL_widget_alter_controls() {
 			echo '<span class="description warning">' . __( "<b>Lazy Loading</b> <i>must</i> be enabled to activate this option.", LWL_PLUGIN_DOMAIN ) . '</span>';
 		}
 		echo '</div>';
-		
+
 		echo $options_prefix;
-		
+
 		// load on sight
 		$checked = ( ( !isset( $settings[$widget_id]['load-on-sight'] ) || ( $settings[$widget_id]['load-on-sight'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<div class="section">';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $widget_id . '-load-on-sight"/>';
 		echo '<label class="title" title="' . __( "Will load content only when it enters the viewport.", LWL_PLUGIN_DOMAIN ) .'" for="' . $widget_id . '-load-on-sight">' . __( 'Load on sight', LWL_PLUGIN_DOMAIN ) . '</label>';
 		echo '</div>';
-		
+
 		// auto-noscript
 		$checked = ( ( !isset( $settings[$widget_id]['auto-noscript'] ) || ( $settings[$widget_id]['auto-noscript'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<div class="section">';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $widget_id . '-auto-noscript"/>';
 		echo '<label title="' . __( "Automatically generates noscript tags to provide alternative content used when a visitor has JavaScript disabled.", LWL_PLUGIN_DOMAIN ) .'" for="' . $widget_id . '-auto-noscript">' . __( 'Automatic noscript', LWL_PLUGIN_DOMAIN ) . '</label>';
 		echo '</div>';
-		
+
 		// mesosense
 		$checked = ( ( isset( $settings[$widget_id]['mesosense'] ) && ( $settings[$widget_id]['mesosense'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<div class="section">';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $widget_id . '-mesosense"/>';
 		echo '<label title="' . __( "This setting can help to load content when normal loading fails. Unless that happens, don't turn this option on.", LWL_PLUGIN_DOMAIN ) . '" for="' . $widget_id . '-mesosense">' . __( 'Use mesosense', LWL_PLUGIN_DOMAIN ) . '</label>';
 		echo '</div>';
-		
+
 	} else {
 		echo '<div class="section">'; 
 		echo __( '<span style="font-weight:bold;font-style:italic;color:#093;">Go Pro!</span> <a title="The Itthinx LazyLoader for content and widgets, helps to greatly improve page load time and bandwidth usage. Power SEO by improving site speed!" href="http://www.itthinx.com/plugins/itthinx-lazyloader" target="_blank">Itthinx LazyLoader</a>' );
 		echo '</div>';
-		
+
 		echo $options_prefix;
 	}
-	
+
 	// use throbber?
 	$checked = ( ( isset($settings[$widget_id]['throbber']) && $settings[$widget_id]['throbber'] ) ? 'checked="checked"' : '' );
 	echo '<div class="section">';
 	echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $widget_id . '-lazy-widget-loader-throbber"/>';
 	echo '<label class="throbber-option" for="' . $widget_id . '-lazy-widget-loader-throbber">' . __( 'Throbber', LWL_PLUGIN_DOMAIN ) . '</label>';
-	
+
 	echo '</div>';
-	
+
 	// widget minimum width
 	$widget_min_width_option_id = $widget_id.'-lazy-widget-loader-min-width';
 	if ( isset( $settings[$widget_id]['min-width'] ) ) {
@@ -638,13 +633,13 @@ function LWL_widget_alter_controls() {
 	} else {
 		$min_width = '';
 	}
-	
+
 	echo '<div class="section">';
-	
+
 	echo '<label class="min-width" for="' . $widget_min_width_option_id .'">' . __( 'Minimum Width', LWL_PLUGIN_DOMAIN ) . '</label>';
 	echo '<input class="min-width" size="3" name="' . $widget_min_width_option_id . '" type="text" value="' . esc_attr( $min_width ) . '">';
 	echo '<span class="description">px</span>';
-	
+
 	// widget width
 	$widget_width_option_id = $widget_id.'-lazy-widget-loader-width';
 	if ( isset( $settings[$widget_id]['width'] ) ) {
@@ -655,15 +650,15 @@ function LWL_widget_alter_controls() {
 	} else {
 		$width = '';
 	}
-	
+
 	echo '<label class="width" for="' . $widget_width_option_id .'">' . __( 'Width', LWL_PLUGIN_DOMAIN ) . '</label>';
 	echo '<input class="width" size="3" name="' . $widget_width_option_id . '" type="text" value="' . esc_attr( $width ) . '">';
 	echo '<span class="description">px</span>';
-	
+
 	echo '</div>'; // .section
-	
+
 	echo '<div class="section bottom">';
-	
+
 	// widget minimum height
 	$widget_min_height_option_id = $widget_id.'-lazy-widget-loader-min-height';
 	if ( isset( $settings[$widget_id]['min-height'] ) ) {
@@ -677,7 +672,7 @@ function LWL_widget_alter_controls() {
 	echo '<label class="min-height" for="' . $widget_min_height_option_id .'">' . __( 'Minimum Height', LWL_PLUGIN_DOMAIN ) . '</label>';
 	echo '<input class="min-height" size="3" name="' . $widget_min_height_option_id . '" type="text" value="' . esc_attr( $min_height ) . '">';
 	echo '<span class="description">px</span>';
-	
+
 	// widget height
 	$widget_height_option_id = $widget_id.'-lazy-widget-loader-height';
 	if ( isset( $settings[$widget_id]['height'] ) ) {
@@ -691,22 +686,22 @@ function LWL_widget_alter_controls() {
 	echo '<label class="height" for="' . $widget_height_option_id .'">' . __( 'Height', LWL_PLUGIN_DOMAIN ) . '</label>';
 	echo '<input class="height" size="3" name="' . $widget_height_option_id . '" type="text" value="' . esc_attr( $height ) . '">';
 	echo '<span class="description">px</span>';
-	
+
 	echo '</div>'; // .section
-	
+
 	// itthinx-lazyloader secondary options
 	if ( function_exists( "IX_LL_lazyload" ) ) {
-		
+
 		// container
 		$container = "";
 		if ( isset( $settings[$widget_id]['container'] ) ) {
-			$container = $settings[$widget_id]['container'];			
+			$container = $settings[$widget_id]['container'];
 		}
 		echo '<div class="section">';
 		echo '<label class="container" for="' . $widget_id .'-ll-container">' . __( 'Container', LWL_PLUGIN_DOMAIN ) . '</label>';
 		echo '<input class="container" name="' . $widget_id . '-ll-container" type="text" value="' . esc_attr( $container ) . '">';
 		echo '</div>';
-		
+
 		// class
 		$class = "";
 		if ( isset( $settings[$widget_id]['class'] ) ) {
@@ -716,7 +711,7 @@ function LWL_widget_alter_controls() {
 		echo '<label class="class" for="' . $widget_id .'-ll-class">' . __( 'Class', LWL_PLUGIN_DOMAIN ) . '</label>';
 		echo '<input class="class" name="' . $widget_id . '-ll-class" type="text" value="' . esc_attr( $class ) . '">';
 		echo '</div>';
-		
+
 		// id
 		$id = "";
 		if ( isset( $settings[$widget_id]['id'] ) ) {
@@ -727,11 +722,11 @@ function LWL_widget_alter_controls() {
 		echo '<input class="id widefat" name="' . $widget_id . '-ll-id" type="text" value="' . esc_attr( $id ) . '">';
 		echo '</div>';
 	}
-	
+
 	echo $options_suffix;
 
 	echo '</div>'; // .lazy-widget-loader .widget-controls
-	
+
 	echo '
 	<script type="text/javascript">
 	LWLToggler("#toggler-' . $LWL_widget_count . '");
