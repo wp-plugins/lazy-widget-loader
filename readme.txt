@@ -110,6 +110,10 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 
 == Changelog ==
 
+= 1.2.3 =
+* Corrected formatting
+* Added support for Itthinx LazyLoader's offset parameter that triggers load
+on sight at a predetermined distance before a widget enters the viewport.
 
 = 1.2.2 =
 * Improved compatibility for widgets, including those without controls.
@@ -130,6 +134,9 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 
 == Upgrade Notice ==
 
+= 1.2.3 =
+Now supports Itthinx LazyLoader's offset parameter that triggers load
+on sight at a predetermined distance before a widget enters the viewport.
 
 = 1.2.2 =
 Further improved widget compatibility, please update. 
