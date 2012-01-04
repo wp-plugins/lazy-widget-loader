@@ -1,7 +1,7 @@
 === Lazy Widget Loader ===
 Contributors: itthinx
 Donate link: http://www.itthinx.com/plugins/itthinx-lazyloader
-Tags: ad, addtoany, ads, adsense, async, asynchronous, asynchronous loading, del.icio.us, delicious, deviantart, facebook, facepile, flickr, lazy, lazy acquisition, lazy load, lazy loading, like box, likebox, linkedin, page load, page load time, page loading, page loading time, page rank, page speed, pagerank, pagespeed, twitter, seo, site, social, vimeo, widget, wordpress, xing, youtube
+Tags: ad, addtoany, ads, adsense, async, asynchronous, asynchronous loading, del.icio.us, delicious, deviantart, facebook, facepile, flickr, lazy, lazy acquisition, lazy load, lazy loading, like box, likebox, linkedin, page load, page load time, page loading, page loading time, page rank, page speed, pagerank, pagespeed, twitter, seo, site, social, vimeo, widget, wordpress, xing, youtube, zork
 Requires at least: 3.0
 Tested up to: 3.3.1
 Stable tag: 1.2.2
@@ -10,7 +10,8 @@ Lazy Widget Loader provides lazy loading for widgets to improve page loading. Us
 
 == Description ==
 
-The Lazy Widget Loader plugin provides lazy loading for widgets to improve page loading. Use it on slow widgets, especially those where external data is loaded, like widgets from Facebook, Twitter, AdSense, ...
+The Lazy Widget Loader plugin provides lazy loading for widgets to improve page loading.
+Use it on slow widgets, especially those where external data is loaded, like widgets from Facebook, Twitter, AdSense, ...
 
 What this plugin basically does is to postpone loading the content of those widgets you choose, so that their content is loaded after the main content of the page that is displayed.
 
@@ -109,6 +110,7 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 
 == Changelog ==
 
+
 = 1.2.2 =
 * Improved compatibility for widgets, including those without controls.
 
@@ -127,6 +129,7 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 * Initial internal release.
 
 == Upgrade Notice ==
+
 
 = 1.2.2 =
 Further improved widget compatibility, please update. 
