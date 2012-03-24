@@ -21,7 +21,7 @@
  * Plugin Name: Lazy Widget Loader
  * Plugin URI: http://www.itthinx.com/plugins/lazy-widget-loader
  * Description: The Lazy Widget Loader provides a lazy loading mechanism that defers loading the content of selected widgets to the footer, allowing your main content to appear first. Use it on slow widgets, especially those that load content from external sources like Facebook, Twitter, AdSense, ... <strong>Go Pro!</strong> Enable advanced lazy loading mechanisms for <em>content and widgets</em> with <a href="http://www.itthinx.com/plugins/itthinx-lazyloader" target="_blank"><strong>Itthinx LazyLoader</strong></a>: <strong>Speed up page load time, on-demand asynchronous loading, lazy-loading shortcodes</strong>.
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: itthinx (Karim Rahimpur)
  * Author URI: http://www.itthinx.com
  * Donate-Link: http://www.itthinx.com/plugins/itthinx-lazyloader
@@ -32,6 +32,11 @@
  * @var string plugin url
  */
 define( 'LWL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * @var string plugin directory
+ */
+define( 'LWL_PLUGIN_DIR', dirname( __FILE__ ) );
 
 /**
  * @var string plugin domain
@@ -103,6 +108,24 @@ function _LWL_update_settings( $settings ) {
     if ( update_option( 'lazy-widget-loader-settings', $settings ) ) {
         $result = true;
         $LWL_settings = get_option( 'lazy-widget-loader-settings', array() );
+    }
+    $css = LWL_generate_CSS();
+    $css = preg_replace( "/\s+/", ' ', $css);
+    if ( strlen( $css ) > 0 ) {
+    	if ( LWL_update_CSS_file( $css ) ) {
+    		$settings['load_widget_css'] = true;
+    		$settings['generate_widget_css'] = false;
+    	} else {
+    		$settings['load_widget_css'] = false;
+    		$settings['generate_widget_css'] = true;
+    	}
+    } else {
+    	$settings['load_widget_css'] = false;
+    	$settings['generate_widget_css'] = false;
+    }
+    if ( update_option( 'lazy-widget-loader-settings', $settings ) ) {
+    	$result = true;
+    	$LWL_settings = get_option( 'lazy-widget-loader-settings', array() );
     }
     return $result;
 }
@@ -248,9 +271,18 @@ add_action( 'wp_print_styles', 'LWL_wp_print_styles' );
  */
 function LWL_wp_print_styles() {
     global $LWL_version;
+    $settings = LWL_get_settings();
+    if ( !isset($settings['load_widget_css'] ) ) {
+    	_LWL_update_settings( $settings );
+    	$settings = LWL_get_settings();
+    }
     if ( !is_admin() ) {
         wp_enqueue_style( 'lazy-widget-loader', LWL_PLUGIN_URL . 'css/lwl.css', array(), $LWL_version );
-        wp_enqueue_style( 'lazy-widget-loader-css', LWL_PLUGIN_URL . 'css/lwl-widget-css.php', array(), $LWL_version );
+        if ( $settings['load_widget_css'] ) {
+        	wp_enqueue_style( 'lazy-widget-loader-css', LWL_PLUGIN_URL . 'css/lwl-widget.css', array(), $LWL_version );
+        } else if ( $settings['generate_widget_css'] ) {
+        	wp_enqueue_style( 'lazy-widget-loader-css', LWL_PLUGIN_URL . 'css/lwl-widget-css.php', array(), $LWL_version );
+        }
     }
 }
 
@@ -760,4 +792,78 @@ function LWL_widget_alter_controls() {
     LWLToggler("#toggler-' . $LWL_widget_count . '");
     </script>
     ';
+}
+
+function LWL_update_CSS_file( $css ) {
+	if ( !file_exists( LWL_PLUGIN_DIR . '/css' ) ) {
+		mkdir( LWL_PLUGIN_DIR . '/css', 0755, true );
+	}
+	$outfile = LWL_PLUGIN_DIR . '/css/lwl-widget.css';
+	$out = @fopen( $outfile , "wb");
+	$bytes = false;
+	$success = false;
+	if ( $out !== false ) {
+		$bytes = @fwrite( $out, $css );
+		$success = @fclose( $out );
+	}
+	return ( $out !== false ) && ( $bytes !== false ) && $success;
+}
+
+function LWL_generate_CSS() {
+	$output = "";
+	$settings = LWL_get_settings();
+	if ( !empty( $settings ) ) {
+		foreach ( $settings as $id => $values ) {
+			if ( isset( $settings[$id]['use'] ) && $settings[$id]['use'] ) {
+				$width = 0;
+				$min_width = 0;
+				$height = 0;
+				$min_height = 0;
+				$throbber = false;
+				if ( isset( $settings[$id]['throbber'] ) ) {
+					$throbber = true;
+				}
+				if ( isset( $settings[$id]['width'] ) ) {
+					$width = intval( $settings[$id]['width'] );
+				}
+				if ( isset( $settings[$id]['height'] ) ) {
+					$height = intval( $settings[$id]['height'] );
+				}
+				if ( isset( $settings[$id]['min-width'] ) ) {
+					$min_width = intval( $settings[$id]['min-width'] );
+				}
+				if ( isset( $settings[$id]['min-height'] ) ) {
+					$min_height = intval( $settings[$id]['min-height'] );
+				}
+				if ( $throbber ) {
+					$min_height = max( array( LWL_THROBBER_HEIGHT, $min_height ) );
+				}
+				if ( $throbber || ( $min_width > 0 ) || ( $min_height > 0 ) || ( $width > 0 ) || ( $height > 0 ) ) {
+					if ( $throbber ) {
+						$output .= "#lwl-container-$id {";
+						$output .= 'background: url(../images/throbber.gif) transparent center center no-repeat;';
+						if ( $min_height > 0 ) {
+							$output .= "min-height: $min_height"."px;";
+						}
+						$output .= '}' . "\n";
+					}
+					$output .= "#lwl-widget-$id {";
+					if ( $min_width > 0 ) {
+						$output .= "min-width: $min_width"."px;";
+					}
+					if ( $min_height > 0 ) {
+						$output .= "min-height: $min_height"."px;";
+					}
+					if ( $width > 0 ) {
+						$output .= "width: $width"."px;";
+					}
+					if ( $height > 0 ) {
+						$output .= "height: $height"."px;";
+					}
+					$output .= '}' . "\n";
+				}
+			}
+		}
+	}
+	return $output;
 }
