@@ -152,3 +152,4 @@ Please update to this release if you get "Warning: Cannot use a scalar value as 
 
 = 1.2.0 =
 There is no need to upgrade yet.
+
