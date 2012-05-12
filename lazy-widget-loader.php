@@ -21,8 +21,8 @@
  * Plugin Name: Lazy Widget Loader
  * Plugin URI: http://www.itthinx.com/plugins/lazy-widget-loader
  * Description: The Lazy Widget Loader provides a lazy loading mechanism that defers loading the content of selected widgets to the footer, allowing your main content to appear first. Use it on slow widgets, especially those that load content from external sources like Facebook, Twitter, AdSense, ... <strong>Go Pro!</strong> Enable advanced lazy loading mechanisms for <em>content and widgets</em> with <a href="http://www.itthinx.com/plugins/itthinx-lazyloader" target="_blank"><strong>Itthinx LazyLoader</strong></a>: <strong>Speed up page load time, on-demand asynchronous loading, lazy-loading shortcodes</strong>.
- * Version: 1.2.4
- * Author: itthinx (Karim Rahimpur)
+ * Version: 1.2.5
+ * Author: itthinx
  * Author URI: http://www.itthinx.com
  * Donate-Link: http://www.itthinx.com/plugins/itthinx-lazyloader
  * License: GPLv3
@@ -173,7 +173,14 @@ add_action( 'admin_menu', 'LWL_admin_menu' );
  */
 function LWL_admin_menu() {
     if ( function_exists('add_submenu_page') ) {
-        add_submenu_page('plugins.php', __('Lazy Widget Loader Options'), __('Lazy Widget Loader'), 'manage_options', 'lazy-widget-loader-options', 'LWL_options');
+        add_submenu_page(
+        	'plugins.php',
+        	__( 'Lazy Widget Loader Options', LWL_PLUGIN_DOMAIN ),
+        	__( 'Lazy Widget Loader', LWL_PLUGIN_DOMAIN ),
+        	'manage_options',
+        	'lazy-widget-loader-options',
+        	'LWL_options'
+        );
     }
 }
 
@@ -229,7 +236,7 @@ add_filter( 'plugin_action_links', 'LWL_plugin_action_links', 10, 2 );
  */
 function LWL_plugin_action_links( $links, $file ) {
     if ( $file == plugin_basename( dirname(__FILE__).'/lazy-widget-loader.php' ) ) {
-        $links[] = '<a href="plugins.php?page=lazy-widget-loader-options">'.__('Options').'</a>';
+        $links[] = '<a href="plugins.php?page=lazy-widget-loader-options">'.__( 'Options', LWL_PLUGIN_DOMAIN ).'</a>';
     }
     return $links;
 }
@@ -866,4 +873,14 @@ function LWL_generate_CSS() {
 		}
 	}
 	return $output;
+}
+
+add_action( 'init', 'LWL_init' );
+
+/**
+ * Initialization.
+ * - Loads the plugin's translations.
+ */
+function LWL_init() {
+	load_plugin_textdomain( LWL_PLUGIN_DOMAIN, null, 'lazy-widget-loader/languages' );
 }
