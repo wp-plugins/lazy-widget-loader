@@ -3,8 +3,9 @@ Contributors: itthinx
 Donate link: http://www.itthinx.com/plugins/itthinx-lazyloader
 Tags: ad, addtoany, ads, adsense, async, asynchronous, asynchronous loading, del.icio.us, delicious, deviantart, facebook, facepile, flickr, lazy, lazy acquisition, lazy load, lazy loading, like box, likebox, linkedin, page load, page load time, page loading, page loading time, page rank, page speed, pagerank, pagespeed, twitter, seo, site, social, vimeo, widget, wordpress, xing, youtube, zork
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 1.2.4
+Tested up to: 3.4.1
+Stable tag: 1.2.6
+License: GPLv3
 
 Lazy Widget Loader provides lazy loading for widgets to improve page loading. Use on slow widgets with content from Facebook, Twitter, AdSense ...
 
@@ -25,6 +26,10 @@ Please try to solve problems there before you rate this plugin or say it doesn't
 A _lot_ of work goes into providing you with free quality plugins! Please appreciate that and help with your feedback. Thanks!
 
 [Follow me on Twitter](http://twitter.com/itthinx) for updates on this and other plugins.
+
+__Translations__
+
+* Lithuanian translation provided by Vincent G from [Host1Free](http://www.Host1Free.com) - Thanks for your help!
 
 = Advanced lazy loading integration =
 
@@ -110,6 +115,12 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 
 == Changelog ==
 
+= 1.2.6 =
+* WP 3.4.1 compatibility
+
+= 1.2.5 =
+* Lithuanian translation added
+
 = 1.2.4 =
 * Performance improved through better widget CSS handling
 
@@ -137,6 +148,13 @@ on sight at a predetermined distance before a widget enters the viewport.
 
 == Upgrade Notice ==
 
+= 1.2.6 =
+* WP 3.4.1 compatibility
+
+= 1.2.5 =
+- Added Lithuanian translation.
+- Added missing domain on some language labels.
+
 = 1.2.4 =
 Please update: performance improvement - better widget CSS handling - generating file instead of on the fly.
 
@@ -152,4 +170,3 @@ Please update to this release if you get "Warning: Cannot use a scalar value as 
 
 = 1.2.0 =
 There is no need to upgrade yet.
-
