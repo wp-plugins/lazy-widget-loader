@@ -3,7 +3,7 @@ Contributors: itthinx
 Donate link: http://www.itthinx.com/plugins/itthinx-lazyloader
 Tags: ad, addtoany, ads, adsense, async, asynchronous, asynchronous loading, del.icio.us, delicious, deviantart, facebook, facepile, flickr, lazy, lazy acquisition, lazy load, lazy loading, like box, likebox, linkedin, page load, page load time, page loading, page loading time, page rank, page speed, pagerank, pagespeed, twitter, seo, site, social, vimeo, widget, wordpress, xing, youtube, zork
 Requires at least: 3.0
-Tested up to: 3.4.1
+Tested up to: 3.5
 Stable tag: 1.2.6
 License: GPLv3
 
@@ -115,6 +115,9 @@ Embed widgets based on code from external sources like Facebook, Twitter etc. wi
 
 == Changelog ==
 
+= 1.2.7 =
+* No changes, tested for WP 3.5 compatibility.
+
 = 1.2.6 =
 * WP 3.4.1 compatibility
 
@@ -147,6 +150,9 @@ on sight at a predetermined distance before a widget enters the viewport.
 * Initial internal release.
 
 == Upgrade Notice ==
+
+= 1.2.7 =
+* WP 3.5 compatibility
 
 = 1.2.6 =
 * WP 3.4.1 compatibility

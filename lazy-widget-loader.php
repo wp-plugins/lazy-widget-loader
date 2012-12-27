@@ -21,7 +21,7 @@
  * Plugin Name: Lazy Widget Loader
  * Plugin URI: http://www.itthinx.com/plugins/lazy-widget-loader
  * Description: The Lazy Widget Loader provides a lazy loading mechanism that defers loading the content of selected widgets to the footer, allowing your main content to appear first. Use it on slow widgets, especially those that load content from external sources like Facebook, Twitter, AdSense, ... <strong>Go Pro!</strong> Enable advanced lazy loading mechanisms for <em>content and widgets</em> with <a href="http://www.itthinx.com/plugins/itthinx-lazyloader" target="_blank"><strong>Itthinx LazyLoader</strong></a>: <strong>Speed up page load time, on-demand asynchronous loading, lazy-loading shortcodes</strong>.
- * Version: 1.2.6
+ * Version: 1.2.7
  * Author: itthinx
  * Author URI: http://www.itthinx.com
  * Donate-Link: http://www.itthinx.com/plugins/itthinx-lazyloader
