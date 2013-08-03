@@ -21,10 +21,9 @@ jQuery(window).load(function(){
 	jQuery.each(jQuery('.lwl-widget'), function() {
 		var widget_id = this.id.replace('lwl-widget-','');
 		var widget_container = document.getElementById('lwl-container-'+widget_id);
-		if (typeof( widget_container) != 'undefined') {
-			var widget_container_parent = widget_container.parentNode;
-			if (typeof( widget_container_parent ) != 'undefined') {
-				widget_container_parent.replaceChild(this, widget_container);
+		if (typeof widget_container != 'undefined') {
+			if (typeof widget_container.parentNode != 'undefined') {
+				widget_container.parentNode.replaceChild(this, widget_container);
 			}
 		}
 	});
